@@ -2,7 +2,7 @@
 """
 Created on Tue Feb 28 16:28:17 2023
 
-@author: Caterina Brighi
+@author: cbri3325
 """
 
 import SimpleITK as sitk
@@ -10,15 +10,15 @@ import pandas as pd
 import os
 from ImageAnalysisFunctions import getMaxRoi,getMeanRoi
 
-data_supradir = 'Path to data directory'
+data_supradir = 'C:/Users/cbri3325/OneDrive - The University of Sydney (Staff)/Caterina Brighi/Data/PSMA GBM/FullBoby_PSMA_Analysed/'
 
 subjs_path = [ f.path for f in os.scandir(data_supradir) if f.is_dir() ] #Create a list of the paths to the subjects directories
 subjs_name = [ f.name for f in os.scandir(data_supradir) if f.is_dir() ] #Create a lisdt of subjects names
 
 n_subj = len(subjs_name) #Total number of subjects
 
-results = pd.ExcelWriter(data_supradir +'TLR_results.xlsx')
-res_df = pd.DataFrame(columns=['Subject ID', 'Liver PSMA mean', 'Liver PSMA max', 'Tumour PSMA mean', 'Tumour PSMA max', 'TLR PSMA mean', 'TLR PSMA max'])
+results = pd.ExcelWriter(data_supradir +'TLR_TSG_results.xlsx')
+res_df = pd.DataFrame(columns=['Subject ID', 'Liver PSMA mean', 'Liver PSMA max', 'Salivary Glands PSMA mean', 'Salivary Glands PSMA max', 'Tumour PSMA mean', 'Tumour PSMA max', 'TLR PSMA mean', 'TLR PSMA max', 'TSG PSMA mean', 'TSG PSMA max'])
 
 #%%Create a for loop to perform image analysis on each subject sequentially
 
@@ -37,19 +37,24 @@ for current in subjs_name:
     
     PSMA_PET = sitk.ReadImage(subj_dir +'/'+ subj_name +'_PET_PSMA_FullBody.nii') #read PET PSMA image
     Tumour = sitk.ReadImage(subj_dir +'/'+ subj_name +'_Tumour.nii') #read tumour roi
-    Liver = sitk.ReadImage(subj_dir +'/'+ subj_name +'_Liver.nii') #read tumour roi
+    Liver = sitk.ReadImage(subj_dir +'/'+ subj_name +'_Liver.nii') #read liver roi
+    SalivaryGlands = sitk.ReadImage(subj_dir +'/'+ subj_name +'_SalivaryGlands.nii') #read salivary glands roi
     
     Liver_Mean = getMeanRoi(Liver, PSMA_PET)
     Liver_Max = getMaxRoi(Liver, PSMA_PET)
+    SG_Mean = getMeanRoi(SalivaryGlands, PSMA_PET)
+    SG_Max = getMaxRoi(SalivaryGlands, PSMA_PET)
     Tumour_Mean = getMeanRoi(Tumour, PSMA_PET)
     Tumour_Max = getMaxRoi(Tumour, PSMA_PET)
     
     TLR_Mean = Tumour_Mean/Liver_Mean
     TLR_Max = Tumour_Max/Liver_Max
+    TSG_Mean = Tumour_Mean/SG_Mean
+    TSG_Max = Tumour_Max/SG_Max
     
-    df = {'Subject ID':subj_name, 'Liver PSMA mean':Liver_Mean, 'Liver PSMA max':Liver_Max, 'Tumour PSMA mean':Tumour_Mean, 'Tumour PSMA max':Tumour_Max, 'TLR PSMA mean':TLR_Mean, 'TLR PSMA max':TLR_Max}
+    df = {'Subject ID':subj_name, 'Liver PSMA mean':Liver_Mean, 'Liver PSMA max':Liver_Max, 'Salivary Glands PSMA mean':SG_Mean, 'Salivary Glands PSMA max':SG_Max,'Tumour PSMA mean':Tumour_Mean, 'Tumour PSMA max':Tumour_Max, 'TLR PSMA mean':TLR_Mean, 'TLR PSMA max':TLR_Max, 'TSG PSMA mean':TSG_Mean, 'TSG PSMA max':TSG_Max}
     res_df = res_df.append(df, ignore_index=True)
     
-res_df.to_excel(results, sheet_name='TLR', index=False)
+res_df.to_excel(results, sheet_name='TLR and TSG', index=False)
 results.save()
     
