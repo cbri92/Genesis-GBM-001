@@ -10,7 +10,7 @@ import pandas as pd
 import os
 from ImageAnalysisFunctions import getMaxRoi,getMeanRoi
 
-data_supradir = 'C:/Users/cbri3325/OneDrive - The University of Sydney (Staff)/Caterina Brighi/Data/PSMA GBM/FullBoby_PSMA_Analysed/'
+data_supradir = 'Path to data directory'
 
 subjs_path = [ f.path for f in os.scandir(data_supradir) if f.is_dir() ] #Create a list of the paths to the subjects directories
 subjs_name = [ f.name for f in os.scandir(data_supradir) if f.is_dir() ] #Create a lisdt of subjects names
