@@ -16,3 +16,7 @@ Beside standard python packages for data analysis (numpy, pandas, glob, matplotl
 To run most of the script, make sure to have in the same repository from which the script is run the following two scripts, containing general image analysis and visualisation functions:
 - *ImageAnalysisFunctions.py*
 - *ImageResultsVisualizationFunctions.py*
+
+## Citation
+
+If you use this repository in your work, please cite 10.5281/zenodo.8124206 
