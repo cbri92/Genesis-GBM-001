@@ -19,4 +19,5 @@ To run most of the script, make sure to have in the same repository from which t
 
 ## Citation
 
-If you use this repository in your work, please cite 10.5281/zenodo.8124206 
+If you use this repository in your work, please cite this work by downloading the citation from the right hand tab.
+http://doi.org/10.5281/zenodo.8124206 
